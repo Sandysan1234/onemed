@@ -7,7 +7,7 @@ include "template/header.php";
 
 
 <div id="layoutAuthentication">
-    <div id="layoutAuthentication_content" class="d-flex align-items-center justify-content-center">
+    <div id="layoutAuthentication_content" >
         <main>
             <div class="container">
                 <div class="row justify-content-center">
@@ -19,31 +19,31 @@ include "template/header.php";
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <div class="form-floating mb-3 mb-md-0">
-                                                <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" name="first_name"/>
+                                                <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" name="first_name" required/>
                                                 <label for="inputFirstName">First name</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-floating">
-                                                <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" name="last_name"/>
+                                                <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" name="last_name" required/>
                                                 <label for="inputLastName">Last name</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" name="email" />
+                                        <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" name="email" required />
                                         <label for="inputEmail">Email address</label>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <div class="form-floating mb-3 mb-md-0">
-                                                <input class="form-control" id="inputPassword" type="password" placeholder="Create a password" name="password" />
+                                                <input class="form-control" id="inputPassword" type="password" placeholder="Create a password" name="password" required/>
                                                 <label for="inputPassword">Password</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-floating mb-3 mb-md-0">
-                                                <input class="form-control" id="inputPasswordConfirm" type="password" placeholder="Confirm password" name="password2" />
+                                                <input class="form-control" id="inputPasswordConfirm" type="password" placeholder="Confirm password" name="password2" required />
                                                 <label for="inputPasswordConfirm">Confirm Password</label>
                                             </div>
                                         </div>
@@ -63,34 +63,35 @@ include "template/header.php";
         </main>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php
 if (isset($_POST["submit"])) {
     if (register($_POST) > 0) {
-        // echo "<script>
-        //     Swal.fire({
-        //         title: 'Data berhasil ditambahkan!',
-        //         icon: 'success',
-        //         confirmButtonText: 'OK'
-        //     }).then((result) => {
-        //         if (result.isConfirmed) {
-        //             window.location.href = 'index.php';
-        //         }
-        //     });
-        // </script>";
-        echo "<script>alert('berhasil')</script>";
+        echo "<script>
+            Swal.fire({
+                title: 'Data berhasil ditambahkan!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'login.php';
+                }
+            });
+        </script>";
+        // echo "<script>alert('berhasil')</script>";
     } else {
-        // echo "<script>
-        //     Swal.fire({
-        //         title: 'Gagal menambahkan data!',
-        //         icon: 'error',
-        //         confirmButtonText: 'OK'
-        //     }).then((result) => {
-        //         if (result.isConfirmed) {
-        //             window.location.href = 'index.php';
-        //         }
-        //     });
-        // </script>";
-        echo "<script>alert('gagal')</script>";
+        echo "<script>
+            Swal.fire({
+                title: 'Gagal menambahkan data!',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'register.php';
+                }
+            });
+        </script>";
+        // echo "<script>alert('gagal')</script>";
     }
 }
 include "template/footer.php"
