@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 02, 2025 at 04:05 AM
+-- Generation Time: May 02, 2025 at 03:38 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -38,34 +38,22 @@ CREATE TABLE `tb_kal` (
   `Koreksi` varchar(100) NOT NULL,
   `U95` varchar(100) NOT NULL,
   `Koreksi & U95 yang diijinkan` varchar(100) NOT NULL,
-  `Status` varchar(100) NOT NULL
+  `Status` varchar(100) NOT NULL,
+  `pelaksana` varchar(20) NOT NULL,
+  `no_dokumen` varchar(20) NOT NULL,
+  `lokasi` varchar(10) NOT NULL,
+  `divisi` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tb_kal`
 --
 
-INSERT INTO `tb_kal` (`Nama Alat Ukur`, `No. ID`, `Merk`, `Tanggal Kalibrasi`, `Tanggal Re-Kalibrasi`, `Poin Kalibrasi`, `Hasil Pengukuran`, `Koreksi`, `U95`, `Koreksi & U95 yang diijinkan`, `Status`) VALUES
-('onemed', '1', '123', '2025-04-06 14:56:00', '2025-04-29 14:55:00', 's123', '123', '123', '123', '123', 'OK'),
-('onemed', '123', '123', '2025-04-03 14:30:00', '2025-04-30 14:30:00', 's123', '123', '123', '123', '123', 'OK'),
-('switch alert', '1233', 'rfff', '2025-04-03 16:28:00', '2025-05-01 16:28:00', 'sdfsd', 'sdgsd', 'dffg', 'dfg', 'g', 'OK'),
-('Larutan Standard untuk viscometer Brookfield 30000', '123q', 'qwewqe', '2025-04-02 15:03:00', '2025-05-21 15:02:00', 'fdsafdsa', 'sdafasd', 'dsafds', 'asdfasd', 'dsfasdf', 'OK'),
-('21', '21', '21', '2025-04-09 14:47:00', '2025-05-20 14:47:00', '123', '123', '123', '123', '123', '123'),
-('sdfsdfgb', '435345', '435', '2025-04-09 16:34:00', '2025-04-30 16:34:00', '345', '34', '345', '345', '3', 'OK'),
-('sdfsdfgb', '435345w', '435', '2025-04-09 16:34:00', '2025-04-30 16:34:00', '345', '34', '345', '345', '3', 'OK'),
-('g', 'a', 'a', '2025-04-30 16:33:00', '2025-04-30 16:32:00', 'a', 'a', 'a', 'a', 'a', 'OK'),
-('g', 'a21312321', 'a', '2025-04-30 16:33:00', '2025-04-30 16:32:00', 'a', 'a', 'a', 'a', 'a', 'OK'),
-('Larutan Standard untuk viscometer Brookfield 300001', 'as', 'as', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'as', 'as', 'as', 'as', 'as', 'OK'),
-('onemed3432432', 'asdfdsfsad', '123', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 's123', 'onemed', 's123', '123', 'onemed', 'OK'),
-('coba30', 'coba31', 'coba30', '2025-04-03 13:16:00', '2025-05-27 13:16:00', 'coba21', 'coba21', 'coba21', 'coba21', 'coba21', 'coba21'),
-('hasan', 'hasan', 'hasan', '2025-04-24 16:33:00', '2025-05-01 16:33:00', 'onemed', 'f', 'f', 'f', 'f', 'OK'),
-('hasan', 'hasan2', 'hasan', '2025-04-24 16:33:00', '2025-05-01 16:33:00', 'onemed', 'f', 'f', 'f', 'f', 'OK'),
-('merah', 'merah', 'merah', '2025-04-23 14:40:00', '2025-04-29 14:40:00', 'merah', 'merah', 'merah', 'merah', 'merah', 'OK'),
-('wqeqwewqewq', 'qwewqqweee', 'ff', '2025-04-09 16:39:00', '2025-06-18 16:39:00', 'ffsdfsd', 'dsf', 'dsf', 'fd', 'sdf', 'OK'),
-('sanhh', 'sanh', 'sdfasd', '2025-04-02 16:42:00', '2025-05-21 16:42:00', 'dsafs', 'sdter', 'ert', 'ert', 'ert', 'OK'),
-('Larutan Standard untuk viscometer Brookfield 30000sdf', 'senaaaa12', 'asdfads', '2025-04-08 16:23:00', '2025-05-06 16:23:00', 'sdafsdaf', 'sdfasd', 'asdf', 'sdf', 'hsdf', 'OK'),
-('onemed', 'wqewq q ', '4123541', '2025-04-23 16:30:00', '2025-05-01 16:30:00', 'sdfasd', 'fdsaf', 'sdafasd', 'sdaf', 'sdfa', 'OK'),
-('onemed', 'wqewq q 21', '4123541', '2025-04-23 16:30:00', '2025-05-01 16:30:00', 'sdfasd', 'fdsaf', 'sdafasd', 'sdaf', 'sdfa', 'OK');
+INSERT INTO `tb_kal` (`Nama Alat Ukur`, `No. ID`, `Merk`, `Tanggal Kalibrasi`, `Tanggal Re-Kalibrasi`, `Poin Kalibrasi`, `Hasil Pengukuran`, `Koreksi`, `U95`, `Koreksi & U95 yang diijinkan`, `Status`, `pelaksana`, `no_dokumen`, `lokasi`, `divisi`) VALUES
+('onemed', '1', '123', '2025-04-06 14:56:00', '2025-04-29 14:55:00', 's123', '123', '123', '123', '123', 'OK', 'PASCA', '123', 'GUDANG', 'gudang'),
+('Timbangan Digital 60 kg Sayaki', '11E002', 'a12e', '2025-05-02 14:30:00', '2025-05-02 14:30:00', '(1,00 ~ 60,00) Kg', '(180; 230; 280) °C', '(180; 230; 280) °C2', '0,00 °C', '0,1157°C', '1,5°C/0,5°C', 'OK', 'PASCA', 'TH/1A/024/', 'Injection '),
+('onemed', '123', '123', '2025-05-14 14:30:00', '2025-04-30 14:30:00', 's123', '123', '123', '123', '123', 'OK', 'PASCA ', '123 ', 'GUDANG', 'gudang'),
+('Screw Driver', '72003', '72003', '2025-05-30 14:30:00', '2026-04-11 14:30:00', '(0,4 ; 0,4 ; 0,4 Nm)', '(0,4 ; 0,4 ; 0,4 Nm)', '(0,01Nm)', '0,00 °C', '0,1157°C', '1,5°C/0,5°C', 'OK', 'PASCA', 'TH/1A/024/', 'Elektromed');
 
 -- --------------------------------------------------------
 
@@ -86,7 +74,15 @@ CREATE TABLE `tb_users` (
 
 INSERT INTO `tb_users` (`id`, `full_name`, `email`, `password`) VALUES
 (1, 'saya saya', 'rahmahdiandian@gmail.com', '$2y$10$XwH7vlJJhqD6ROYSS/jlbOHp5aNeOfaVOc1dJ1StsTdxnubmQnsNm'),
-(2, 'karimah nurhalizah', 'sadam.abc25@gmail.com', '$2y$10$h0BMyPxFYQkHyNZj9VtXSu1KIOxGyaK7g8HH3L6G7MYWHlnx72262');
+(2, 'karimah nurhalizah', 'sadam.abc25@gmail.com', '$2y$10$h0BMyPxFYQkHyNZj9VtXSu1KIOxGyaK7g8HH3L6G7MYWHlnx72262'),
+(3, 'dsa dsaf', 'e@email.com', '$2y$10$W2aTFMZNnJdq/SCsDOIl.uLjsvU9kE3vGj47xIB99TKEOLRZACfjm'),
+(4, 'dsa dsaf', 'ea@email.com', '$2y$10$F8N3uK/MxftTGjRFh6pB.uuJyuDuc4xSjqz5wlLoZsk/XYBRuaHjy'),
+(5, 'dsa dsaf', 'ewa@email.com', '$2y$10$NmLENA6ZYTKdpVN5sk7uYe0gLsBmRVIhavAxDePCmEH6EuXg8EBsq'),
+(6, 'dsa dsaf', 'ewsa@email.com', '$2y$10$7qMUMCplnEKVAvjIF4ge2enE0wI4f/wreCiHVqIndmrlCYE3Zhvq2'),
+(7, 'karimah nurhalizah', 'sandya@gmail.com', '$2y$10$rYuS3FQhgIqbSjOFKFjXf.L3m1zjh0dvBgvNmCr4pkVcZb.Vtau5i'),
+(8, 'karimah nurhalizah', 'sandybd@gmail.com', '$2y$10$thyL20sc/eRXdw4r.WSZg.RgOoeEld2hLDyFs/A8R/3S03cef5ubS'),
+(9, 'karimah nurhalizah', 'saandy@gmail.com', '$2y$10$/B5cYYICUNNpjR3MyHEEoe0RSC8GlZF6rrT/uBmJ9USYi3Arwlo4e'),
+(10, 'ss ss', 'f@gmail.com', '$2y$10$osjTTtCaNm9IrwDpLmi67OvmVas9Do/zxhSA26SWAh5HzjdqBxKY.');
 
 --
 -- Indexes for dumped tables
@@ -112,7 +108,7 @@ ALTER TABLE `tb_users`
 -- AUTO_INCREMENT for table `tb_users`
 --
 ALTER TABLE `tb_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
