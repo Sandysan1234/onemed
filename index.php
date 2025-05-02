@@ -2,9 +2,14 @@
 require_once "function.php";
 include "template/header.php";
 include "template/nav.php";
-$kalibrasi =query("SELECT *  FROM tb_kal");
+$kalibrasi =query("SELECT * FROM tb_kal");
 $total_alat = count($kalibrasi);
 $no=1;
+
+if (!isset($_SESSION['email'])) {
+    header("Location: login.php");
+    exit;
+}
 
 
 ?>
@@ -24,8 +29,26 @@ $no=1;
                                 </div>
                             </div>
                             <div class="col-xl-3 col-md-6">
-                                <div class="card bg-warning text-white mb-4">
+                                <div class="card bg-success text-white mb-4">
                                     <div class="card-body">Success Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-warning text-white mb-4">
+                                    <div class="card-body">Warning Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-danger text-white mb-4">
+                                    <div class="card-body">Danger Card</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
                                         <a class="small text-white stretched-link" href="#">View Details</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -54,16 +77,16 @@ $no=1;
                                     
                                     <?php
                                     $today = date('Y-m-d');
-                                    $tanggal_rekalibrasi = $kl['Tanggal Re-Kalibrasi'];
+                                    $tanggal_kalibrasi = $kl['Tanggal Kalibrasi'];
 
                                     $id = $kl['No. ID'];
                                     $nama = $kl['Nama Alat Ukur'];
 
                                     // Hitung countdown
-                                    $diff = round((strtotime($tanggal_rekalibrasi) - strtotime($today)) / (60 * 60 * 24));
-                                    $tgl_format = date('d-m-Y H:i', strtotime($tanggal_rekalibrasi));
+                                    $diff = round((strtotime($tanggal_kalibrasi) - strtotime($today)) / (60 * 60 * 24));
+                                    $tgl_format = date('d-m-Y H:i', strtotime($tanggal_kalibrasi));
 
-                                    if ($tanggal_rekalibrasi <= $today):
+                                    if ($tanggal_kalibrasi <= $today):
                                     ?>
                                         <div class="col-md-3">
                                             <div class="alert alert-danger limit-text">
@@ -84,8 +107,8 @@ $no=1;
                                         <div class="col-md-3">
                                             <div class="alert alert-info limit-text">
                                                 <p><strong><i class="bi bi-info-circle-fill"></i> <?=$diff?> Hari Lagi!</strong></p>
-                                                <p class="fs-5 m-0 p-0">ID: <?= $id ?> | Alat: <?= $nama ?>
-                                                <p class="fs-5 m-0 p-0">Tanggal: <?= $tgl_format ?>
+                                                <p class="fs-5 m-0 p-0">ID: <?= $id ?> | Alat: <?= $nama ?></p>
+                                                <p class="fs-5 m-0 p-0">Tanggal: <?= $tgl_format ?></p>
                                             </div>
                                         </div>
                                     <?php elseif ($diff <= 30): ?>
@@ -119,6 +142,10 @@ $no=1;
                                             <th>U95</th>
                                             <th>Koreksi & U95 yang diijinkan</th>
                                             <th>Status</th>
+                                            <th>Pelaksana</th>
+                                            <th>No. Dokumen </th>
+                                            <th>lokasi</th>
+                                            <th>divisi</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -136,6 +163,10 @@ $no=1;
                                             <th>U95</th>
                                             <th>Koreksi & U95 yang diijinkan</th>
                                             <th>Status</th>
+                                            <th>Pelaksana</th>
+                                            <th>No. Dokumen </th>
+                                            <th>lokasi</th>
+                                            <th>divisi</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </tfoot>
@@ -154,10 +185,15 @@ $no=1;
                                             <td><?=$kl['U95'];?></td>
                                             <td><?=$kl['Koreksi & U95 yang diijinkan'];?></td>
                                             <td><?=$kl['Status'];?></td>
+                                            <td><?=$kl['pelaksana'];?></td>
+                                            <td><?=$kl['no_dokumen'];?></td>
+                                            <td><?=$kl['lokasi'];?></td>
+                                            <td><?=$kl['divisi'];?></td>
                                             <td>
                                                 
-                                                <a class="btn btn-warning mb-1 " href="update.php?noid=<?=$kl["No. ID"]?>">Update</a>
-                                                <a class="btn btn-danger" data-bs-toggle="modal"data-bs-target="#hapusModal<?= $kl['No. ID']; ?>">Hapus</a>
+                                                <a class="btn btn-primary mb-1" href="update.php?noid=<?=$kl["No. ID"]?>"><i class="bi bi-eye"></i>                                                </a>
+                                                <a class="btn btn-warning mb-1 text-white" href="update.php?noid=<?=$kl["No. ID"]?>"><i class="bi bi-pencil-square"></i>                                                </a>
+                                                <a class="btn btn-danger" data-bs-toggle="modal"data-bs-target="#hapusModal<?= $kl['No. ID']; ?>"><i class="bi bi-trash3"></i>                                                </a>
                                                 
                                             </td>
                                         </tr>
@@ -187,5 +223,64 @@ $no=1;
                         </div>
                     </div>
                 </main>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; JMI 2025</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; JMI 2025</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script>
+            function confirmlogout() {
+                Swal.fire({
+                    title: "Keluar dari akun?",
+                    text: "Anda yakin ingin logout?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Ya, Logout"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "logout.php";
+                    }
+                });
 
-<?php include "template/footer.php"; ?>
+                // cegah href langsung dijalankan
+                return false;
+            }
+        </script> 
+        
+        <!-- switch alert -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/scripts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+        <script src="assets/demo/chart-area-demo.js"></script>
+        <script src="assets/demo/chart-bar-demo.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="js/datatables-simple-demo.js"></script>
+    </body>
+</html>
+

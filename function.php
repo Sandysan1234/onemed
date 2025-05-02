@@ -8,20 +8,29 @@ if (!$koneksi) {
 
 if (isset($_POST['login'])){
 
-    $username = $_POST['username'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $check = mysqli_query($koneksi, "SELECT * FROM user WHERE username ='$username' AND password= '$password'");
-    $hitung = mysqli_num_rows($check);
+    $check = mysqli_query($koneksi, "SELECT * FROM tb_users WHERE email ='$email'");
+    $data = mysqli_fetch_assoc($check);
 
-    if ($hitung > 0){
+    if ($data && password_verify($password, $data['password'])) {
         $_SESSION['login'] = true;
         header('location:index.php');
-    }else{
-        echo '<script>alert("username atau password salah")
-        window.location.href="login.php"</script>'; 
+    } else {
+        echo "<script>
+            Swal.fire({
+                title: 'email atau password!',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'login.php';
+                }
+            });
+        </script>";
     }
-    
+
 }
 
 function query($query){

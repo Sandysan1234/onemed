@@ -1,21 +1,13 @@
 <?php
 require_once "function.php";
+if (!isset($_SESSION['login'])) {
+    header("Location: login.php");
+    exit;
+}
 $noid = $_GET['noid'];
 $kl = query("SELECT * FROM tb_kal WHERE `No. ID` = '$noid'")[0];
 
-if (ISSET($_POST["submit"])) {
-    if (update($_POST)>0) {
-        echo "<script>
-            alert('data berhasil diubah');
-            document.location.href = 'index.php';
-        </script>";
-    }else {
-        echo "<script>
-        alert('data gagal diubah');
-        document.location.href = 'index.php';
-    </script>";
-    }
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +19,7 @@ if (ISSET($_POST["submit"])) {
         <meta name="author" content="" />
         <title>Mengubah Alat</title>
         <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
@@ -199,12 +192,30 @@ if (ISSET($_POST["submit"])) {
                 </footer>
             </div>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="assets/demo/chart-area-demo.js"></script>
-        <script src="assets/demo/chart-bar-demo.js"></script>
-        <script src="assets/demo/chart-pie-demo.js"></script>
     </body>
 </html>
-
+<?php
+if (ISSET($_POST["submit"])) {
+    if (update($_POST)>0) {
+        echo "<script>
+        Swal.fire({
+            title: 'Data berhasil ditambahkan!',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'index.php';
+            }
+        });
+    </script>";
+    }else {
+        echo "<script>
+            Swal.fire({
+                title: 'Gagal menambahkan data!',
+                icon: 'error'    
+            }); </script>";
+    }
+}?>

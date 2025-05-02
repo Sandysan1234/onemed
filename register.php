@@ -54,7 +54,7 @@ include "template/header.php";
                                 </form>
                             </div>
                             <div class="card-footer text-center py-3">
-                                <div class="small"><a href="login.html">Have an account? Go to login</a></div>
+                                <div class="small"><a href="login.php">Sudah punya akun? Go to login</a></div>
                             </div>
                         </div>
                     </div>
@@ -91,7 +91,7 @@ if (isset($_POST["submit"])) {
                 }
             });
         </script>";
-        // echo "<script>alert('gagal')</script>";
+        
     }
 }
 include "template/footer.php"
