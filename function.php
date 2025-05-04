@@ -65,14 +65,42 @@ function tambah($data){
     $divisi =htmlspecialchars($data["divisi"]);
  
 
-    $query = "INSERT INTO tb_kal (`Nama Alat Ukur`, `No. ID`, `Merk`, `Tanggal Kalibrasi`, `Tanggal Re-Kalibrasi`, `Poin Kalibrasi`, `Hasil Pengukuran`, `Koreksi`, `U95`, `Koreksi & U95 yang diijinkan`, `Status`, `pelaksana`, `no_dokumen`, `lokasi`, `divisi`)
+    $query = "INSERT INTO tb_alat (`Nama Alat Ukur`, `No. ID`, `Merk`, `Tanggal Kalibrasi`, `Tanggal Re-Kalibrasi`, `Poin Kalibrasi`, `Hasil Pengukuran`, `Koreksi`, `U95`, `Koreksi & U95 yang diijinkan`, `Status`, `pelaksana`, `no_dokumen`, `lokasi`, `divisi`)
     VALUES
     ('$nama', '$noid', '$merk', '$datebefore', '$dateafter', '$poin', '$hasil', '$koreksi', '$u95', '$koreksi_u95', '$status','$pelaksana','$no_dokumen', '$lokasi', '$divisi')";
 
-
     mysqli_query($koneksi,$query);
+
+    $user = $_SESSION['full_name'] ?? 'unknown';
+
+    logperubahan($no_id, 'Nama Alat Ukur',null, $nama, 'INSERT', $user);
+    logperubahan($no_id, 'Merk',null, $merk, 'INSERT', $user);
+    logperubahan($no_id, 'Tanggal kalibrasi',null, $datebefore, 'INSERT', $user);
+    logperubahan($no_id, 'Status',null, $status, 'INSERT', $user);
+    logperubahan($no_id, 'Status',null, $status, 'INSERT', $user);
+    logperubahan($no_id, 'Status',null, $status, 'INSERT', $user);
+    logperubahan($no_id, 'Status',null, $status, 'INSERT', $user);
+    
+
     
     return mysqli_affected_rows($koneksi);
+
+
+}
+
+function logperubahan($no_id,$kolom, $lama,$baru,$aksi,$user='unknown'){
+    global $koneksi;
+
+    $no_id= mysqli_real_escape_string($koneksi, $no_id)
+    $kolom= mysqli_real_escape_string($koneksi, $kolom)
+    $lama= mysqli_real_escape_string($koneksi, $lama)
+    $baru= mysqli_real_escape_string($koneksi, $baru)
+    $aksi= mysqli_real_escape_string($koneksi, $aksi)
+    $user= mysqli_real_escape_string($koneksi, $user)
+
+    $query = "INSERT INTO tb_kalibrasi_log (no_id, kolom_yang_diubah, nilai_lama, nilai_baru, waktu_perubahan, diubah_oleh, aksi) VALUES ($no_id,$kolom, $lama, $baru, $user, $aksi)";
+
+    mysqli_query($koneksi, $query);
 }
 
 function update($data){
@@ -92,7 +120,7 @@ function update($data){
     $status =htmlspecialchars($data["Status"]);
 
 
-    $query = "UPDATE tb_kal SET
+    $query = "UPDATE tb_alat SET
     `Nama Alat Ukur` = '$nama',
     `No. ID` = '$noid',
     `Merk` = '$merk',
@@ -112,38 +140,13 @@ function update($data){
 }
 
 
+
 function hapus($data){
     global $koneksi;
 
-    mysqli_query($koneksi, "DELETE FROM tb_kal  WHERE `No. ID` = '$data'");
+    mysqli_query($koneksi, "DELETE FROM tb_alat  WHERE `No. ID` = '$data'");
     return mysqli_affected_rows($koneksi);
 }
-// function register($data){
-//     global $koneksi;
-    
-//    $first_name = htmlspecialchars($data['first_name']);
-//     $last_name = htmlspecialchars($data['last_name']);
-//     $email = htmlspecialchars($data['email']);
-//     $password = htmlspecialchars($data['password']);
-//     $password2 = htmlspecialchars($data['password2']);
-
-
-//     $query ="SELECT email FROM tb_users where email = '$email'";
-
-//     $k=mysqli_query($koneksi, $query);
-    
-//     $cekdata= mysqli_affected_rows($koneksi);
-//     if ($password!=$password2) {
-//         return false;
-//     }
-//     if ($cekdata) {
-//         mysqli_query($koneksi,"INSERT INTO tb_users (`full_name`,`email`,`password`) VALUES ('$first_name','$email','$password')");
-//         return mysqli_affected_rows($koneksi);
-//     }else{
-//         return false;
-//     }
-    
-// }
 
 function register($data){
     global $koneksi;
@@ -179,5 +182,6 @@ function register($data){
 
     return mysqli_affected_rows($koneksi);
 }
+
 
 ?>

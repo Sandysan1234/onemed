@@ -8,11 +8,13 @@ if (isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
+
     $check = mysqli_query($koneksi, "SELECT * FROM tb_users WHERE email ='$email'");
     $data = mysqli_fetch_assoc($check);
 
     if ($data && password_verify($password, $data['password'])) {
         $_SESSION['email'] = $data['email'];
+        $_SESSION['full_name'] = $data['full_name'];
         header('Location: index.php');
         exit;
     } else {

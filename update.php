@@ -11,7 +11,7 @@ if (!isset($_SESSION['email'])) {
 
 
 $noid = $_GET['noid'];
-$kl = query("SELECT * FROM tb_kal WHERE `No. ID` = '$noid'")[0];
+$kl = query("SELECT * FROM tb_alat WHERE `No. ID` = '$noid'")[0];
 
 
 ?>

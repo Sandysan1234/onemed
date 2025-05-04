@@ -1,5 +1,6 @@
 <?php
 include "header.php";
+
 // if (!isset($_SESSION['email'])) {
 //         header("Location: login.php");
 //         exit;
@@ -96,7 +97,7 @@ include "header.php";
                     </div>
                     <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
-                        Start Bootstrap
+                        <p class="fs-5 m-0 p-0"><?=$_SESSION['full_name'];?></p>
                     </div>
                 </nav>
             </div>

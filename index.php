@@ -9,7 +9,7 @@ if (!isset($_SESSION['email'])) {
     echo"login dulu bro";
 }
 include "template/nav.php";
-$kalibrasi =query("SELECT * FROM tb_kal");
+$kalibrasi =query("SELECT * FROM tb_alat");
 $total_alat = count($kalibrasi);
 $no=1;
 
