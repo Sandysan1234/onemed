@@ -1,15 +1,18 @@
 <?php
 require_once "function.php";
-include "template/header.php";
+
+if (!isset($_SESSION['email'])) {
+    header("Location:login.php");
+    exit;
+}else {
+    # code...
+    echo"login dulu bro";
+}
 include "template/nav.php";
 $kalibrasi =query("SELECT * FROM tb_kal");
 $total_alat = count($kalibrasi);
 $no=1;
 
-if (!isset($_SESSION['email'])) {
-    header("Location: login.php");
-    exit;
-}
 
 
 ?>
@@ -145,8 +148,8 @@ if (!isset($_SESSION['email'])) {
                                             <th>Pelaksana</th>
                                             <th>No. Dokumen </th>
                                             <th>lokasi</th>
-                                            <th>divisi</th>
-                                            <th>Aksi</th>
+                                            <th>Divisi</th>
+                                            <th>Handle</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -166,8 +169,8 @@ if (!isset($_SESSION['email'])) {
                                             <th>Pelaksana</th>
                                             <th>No. Dokumen </th>
                                             <th>lokasi</th>
-                                            <th>divisi</th>
-                                            <th>Aksi</th>
+                                            <th>Divisi</th>
+                                            <th>Handle</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>

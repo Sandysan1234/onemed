@@ -1,9 +1,14 @@
 <?php
-require_once "function.php";
-if (!isset($_SESSION['login'])) {
-    header("Location: login.php");
+require "function.php";
+
+if (!isset($_SESSION['email'])) {
+    header("Location:login.php");
     exit;
+}else {
+    # code...
+    echo"login dulu bro";
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -136,11 +141,11 @@ if (!isset($_SESSION['login'])) {
                                     </div>
                                     <div class="col-md-4 my-3">
                                         <label for="Tanggal Kalibrasi" class="form-label">Tanggal Kalibrasi</label>
-                                        <input type="datetime-local" name="datebefore" id="datebefore" >
+                                        <input type="datetime-local" name="datebefore" id="datebefore"required>
                                     </div>
                                     <div class="col-md-4 my-3">
                                         <label for="Tanggal re-Kalibrasi" class="form-label">Tanggal  Re-Kalibrasi</label>
-                                        <input type="datetime-local" name="dateafter" id="dateafter" >
+                                        <input type="datetime-local" name="dateafter" id="dateafter" required>
                                     </div>
                                     <div class="col-md-4 my-3">
                                         <label for="poin Kalibrasi" class="form-label">Poin Kalibrasi</label>
@@ -164,7 +169,23 @@ if (!isset($_SESSION['login'])) {
                                     </div>
                                     <div class="col-md-4 my-3">
                                         <label for="status" class="form-label">Status</label>
-                                        <input type="text" class="form-control" name="Status" id="status" required>
+                                        <input type="text" class="form-control" name="status" id="status" required>
+                                    </div>
+                                    <div class="col-md-4 my-3">
+                                        <label for="pelaksana" class="form-label">Pelaksana</label>
+                                        <input type="text" class="form-control" name="pelaksana" id="pelaksana" required>
+                                    </div>
+                                    <div class="col-md-4 my-3">
+                                        <label for="no_dokumen" class="form-label">No. Dokumen</label>
+                                        <input type="text" class="form-control" name="no_dokumen" id="no_dokumen" required>
+                                    </div>
+                                    <div class="col-md-4 my-3">
+                                        <label for="lokasi" class="form-label">Lokasi</label>
+                                        <input type="text" class="form-control" name="lokasi" id="lokasi" required>
+                                    </div>
+                                    <div class="col-md-4 my-3">
+                                        <label for="divisi" class="form-label">Divisi</label>
+                                        <input type="text" class="form-control" name="divisi" id="divisi" required>
                                     </div>
                                     <div class="col-9 d-flex justify-content-center mx-4 my-3">
                                         <button type="submit" name="submit" class="btn btn-primary btn-lg mx-4 my-3">Tambah Alat</button>
@@ -209,17 +230,18 @@ if (isset($_POST["submit"])) {
             });
         </script>";
     } else {
-        echo "<script>
-            Swal.fire({
-                title: 'Gagal menambahkan data!',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'index.php';
-                }
-            });
-        </script>";
+        // echo "<script>
+        //     Swal.fire({
+        //         title: 'Gagal menambahkan data!',
+        //         icon: 'error',
+        //         confirmButtonText: 'OK'
+        //     }).then((result) => {
+        //         if (result.isConfirmed) {
+        //             window.location.href = 'index.php';
+        //         }
+        //     });
+        // </script>";
+        echo"<h1>salah</h1>";
     }
 }
 

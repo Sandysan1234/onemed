@@ -1,9 +1,15 @@
 <?php
-require_once "function.php";
-if (!isset($_SESSION['login'])) {
-    header("Location: login.php");
+require "function.php";
+
+if (!isset($_SESSION['email'])) {
+    header("Location:login.php");
     exit;
+}else {
+    # code...
+    echo"login dulu bro";
 }
+
+
 $noid = $_GET['noid'];
 $kl = query("SELECT * FROM tb_kal WHERE `No. ID` = '$noid'")[0];
 
@@ -132,7 +138,7 @@ $kl = query("SELECT * FROM tb_kal WHERE `No. ID` = '$noid'")[0];
                                     </div>
                                     <div class="col-md-4 my-3">
                                         <input type="hidden" class="form-control" name="noid" id="noid" value="<?=$kl["No. ID"];?>">
-                                      </div>
+                                    </div>
                                     <div class="col-md-4 my-3">
                                         <label for="Merk" class="form-label">Merk/Type/ No. Seri</label>
                                         <input type="text" class="form-control" name="merk" id="merk" required value="<?=$kl["Merk"];?>">
@@ -168,6 +174,22 @@ $kl = query("SELECT * FROM tb_kal WHERE `No. ID` = '$noid'")[0];
                                     <div class="col-md-4 my-3">
                                         <label for="status" class="form-label">Status</label>
                                         <input type="text" class="form-control" name="Status" id="status" required value="<?=$kl["Status"];?>">
+                                    </div>
+                                    <div class="col-md-4 my-3">
+                                        <label for="pelaksana" class="form-label">Pelaksana</label>
+                                        <input type="text" class="form-control" name="pelaksana" id="pelaksana" required value="<?=$kl["pelaksana"];?>">
+                                    </div>
+                                    <div class="col-md-4 my-3">
+                                        <label for="no_dokumen" class="form-label">No. Dokumen</label>
+                                        <input type="text" class="form-control" name="no_dokumen" id="no_dokumen" required value="<?=$kl["no_dokumen"];?>">
+                                    </div>
+                                    <div class="col-md-4 my-3">
+                                        <label for="lokasi" class="form-label">Lokasi</label>
+                                        <input type="text" class="form-control" name="lokasi" id="lokasi" required value="<?=$kl["lokasi"];?>">
+                                    </div>
+                                    <div class="col-md-4 my-3">
+                                        <label for="divisi" class="form-label">Divisi</label>
+                                        <input type="text" class="form-control" name="divisi" id="divisi" required value="<?=$kl["divisi"];?>">
                                     </div>
                                     <div class="col-9 d-flex justify-content-center mx-4 my-3">
                                         <button type="submit" name="submit" class="btn btn-primary btn-lg mx-4 my-3">Update Data</button>

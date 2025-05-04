@@ -1,8 +1,8 @@
 <?php
 include "function.php";
 
+
 $login_error = false;
-$login_success = false;
 
 if (isset($_POST['login'])) {
     $email = $_POST['email'];
@@ -12,8 +12,9 @@ if (isset($_POST['login'])) {
     $data = mysqli_fetch_assoc($check);
 
     if ($data && password_verify($password, $data['password'])) {
-        $_SESSION['login'] = true;
-        $login_success = true; // tanda sukses
+        $_SESSION['email'] = $data['email'];
+        header('Location: index.php');
+        exit;
     } else {
         $login_error = true; // tanda gagal
     }

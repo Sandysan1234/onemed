@@ -6,32 +6,32 @@ if (!$koneksi) {
     die('Koneksi gagal: ' . mysqli_connect_error());
 }
 
-if (isset($_POST['login'])){
+// if (isset($_POST['login'])){
 
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+//     $email = $_POST['email'];
+//     $password = $_POST['password'];
 
-    $check = mysqli_query($koneksi, "SELECT * FROM tb_users WHERE email ='$email'");
-    $data = mysqli_fetch_assoc($check);
+//     $check = mysqli_query($koneksi, "SELECT * FROM tb_users WHERE email ='$email'");
+//     $data = mysqli_fetch_assoc($check);
 
-    if ($data && password_verify($password, $data['password'])) {
-        $_SESSION['login'] = true;
-        header('location:index.php');
-    } else {
-        echo "<script>
-            Swal.fire({
-                title: 'email atau password!',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'login.php';
-                }
-            });
-        </script>";
-    }
+//     if ($data && password_verify($password, $data['password'])) {
+//         $_SESSION['login'] = true;
+//         header('location:index.php');
+//     } else {
+//         echo "<script>
+//             Swal.fire({
+//                 title: 'email atau password!',
+//                 icon: 'error',
+//                 confirmButtonText: 'OK'
+//             }).then((result) => {
+//                 if (result.isConfirmed) {
+//                     window.location.href = 'login.php';
+//                 }
+//             });
+//         </script>";
+//     }
 
-}
+// }
 
 function query($query){
     global $koneksi;
@@ -59,12 +59,15 @@ function tambah($data){
     $u95 =htmlspecialchars($data["u95"]);
     $koreksi_u95 =htmlspecialchars($data["Koreksi_U95_yang_diijinkan"]);
     $status =htmlspecialchars($data["Status"]);
+    $pelaksana =htmlspecialchars($data["pelaksana"]);
+    $no_dokumen =htmlspecialchars($data["no_dokumen"]);
+    $lokasi =htmlspecialchars($data["lokasi"]);
+    $divisi =htmlspecialchars($data["divisi"]);
  
 
-    $query = "INSERT INTO tb_kal 
-    (`Nama Alat Ukur`, `No. ID`, `Merk`, `Tanggal Kalibrasi`, `Tanggal Re-Kalibrasi`, `Poin Kalibrasi`, `Hasil Pengukuran`, `Koreksi`, `U95`, `Koreksi & U95 yang diijinkan`, `Status`)
+    $query = "INSERT INTO tb_kal (`Nama Alat Ukur`, `No. ID`, `Merk`, `Tanggal Kalibrasi`, `Tanggal Re-Kalibrasi`, `Poin Kalibrasi`, `Hasil Pengukuran`, `Koreksi`, `U95`, `Koreksi & U95 yang diijinkan`, `Status`, `pelaksana`, `no_dokumen`, `lokasi`, `divisi`)
     VALUES
-    ('$nama', '$noid', '$merk', '$datebefore', '$dateafter', '$poin', '$hasil', '$koreksi', '$u95', '$koreksi_u95', '$status')";
+    ('$nama', '$noid', '$merk', '$datebefore', '$dateafter', '$poin', '$hasil', '$koreksi', '$u95', '$koreksi_u95', '$status','$pelaksana','$no_dokumen', '$lokasi', '$divisi')";
 
 
     mysqli_query($koneksi,$query);
