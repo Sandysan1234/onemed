@@ -4,9 +4,6 @@ require "function.php";
 if (!isset($_SESSION['email'])) {
     header("Location:login.php");
     exit;
-}else {
-    # code...
-    echo"login dulu bro";
 }
 
 ?>
@@ -115,7 +112,7 @@ if (!isset($_SESSION['email'])) {
                     </div>
                     <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
-                        Start Bootstrap
+                        <p class="fs-5 m-0 p-0"><?=$_SESSION['full_name'];?></p>
                     </div>
                 </nav>
             </div>
@@ -133,7 +130,7 @@ if (!isset($_SESSION['email'])) {
                                     </div>
                                     <div class="col-md-4 my-3">
                                         <label for="No-ID" class="form-label">No. ID</label>
-                                        <input type="text" class="form-control" name="noid" id="noid">
+                                        <input type="text" class="form-control" name="noid" id="noid" required>
                                       </div>
                                     <div class="col-md-4 my-3">
                                         <label for="Merk" class="form-label">Merk/Type/ No. Seri</label>
@@ -216,7 +213,25 @@ if (!isset($_SESSION['email'])) {
     </body>
 </html>
 <?php 
+
 if (isset($_POST["submit"])) {
+    // Tambahkan koneksi database ke dalam scope
+    global $koneksi;
+
+    $noid = $_POST['noid'];
+    $cek = mysqli_query($koneksi, "SELECT * FROM tb_alat WHERE `No. ID` = '$noid' AND is_deleted = 0");
+
+    if (mysqli_num_rows($cek) > 0) {
+        echo "<script>
+            Swal.fire({
+                title: 'No. ID sudah terdaftar!',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+        </script>";
+        exit;
+    }
+
     if (tambah($_POST) > 0) {
         echo "<script>
             Swal.fire({
@@ -230,18 +245,13 @@ if (isset($_POST["submit"])) {
             });
         </script>";
     } else {
-        // echo "<script>
-        //     Swal.fire({
-        //         title: 'Gagal menambahkan data!',
-        //         icon: 'error',
-        //         confirmButtonText: 'OK'
-        //     }).then((result) => {
-        //         if (result.isConfirmed) {
-        //             window.location.href = 'index.php';
-        //         }
-        //     });
-        // </script>";
-        echo"<h1>salah</h1>";
+        echo "<script>
+            Swal.fire({
+                title: 'Gagal menambahkan data!',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        </script>";
     }
 }
 

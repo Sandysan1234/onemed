@@ -4,9 +4,6 @@ require "function.php";
 if (!isset($_SESSION['email'])) {
     header("Location:login.php");
     exit;
-}else {
-    # code...
-    echo"login dulu bro";
 }
 
 

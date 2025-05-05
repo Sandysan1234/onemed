@@ -6,149 +6,138 @@ if (!$koneksi) {
     die('Koneksi gagal: ' . mysqli_connect_error());
 }
 
-// if (isset($_POST['login'])){
-
-//     $email = $_POST['email'];
-//     $password = $_POST['password'];
-
-//     $check = mysqli_query($koneksi, "SELECT * FROM tb_users WHERE email ='$email'");
-//     $data = mysqli_fetch_assoc($check);
-
-//     if ($data && password_verify($password, $data['password'])) {
-//         $_SESSION['login'] = true;
-//         header('location:index.php');
-//     } else {
-//         echo "<script>
-//             Swal.fire({
-//                 title: 'email atau password!',
-//                 icon: 'error',
-//                 confirmButtonText: 'OK'
-//             }).then((result) => {
-//                 if (result.isConfirmed) {
-//                     window.location.href = 'login.php';
-//                 }
-//             });
-//         </script>";
-//     }
-
-// }
-
-function query($query){
+// Fungsi query umum
+function query($query) {
     global $koneksi;
-
-    $result= mysqli_query($koneksi, $query);
-    $tempatKosong =[]; 
-    while($row= mysqli_fetch_assoc($result)){
-        $tempatKosong[]=$row;
+    $result = mysqli_query($koneksi, $query);
+    $rows = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $rows[] = $row;
     }
-    return $tempatKosong;
+    return $rows;
 }
 
-// menambahkan data
-function tambah($data){
+// Fungsi logging perubahan
+function logperubahan($no_id, $kolom, $lama, $baru, $aksi, $user = 'unknown') {
     global $koneksi;
 
-    $nama =htmlspecialchars($data["Nama_Alat_Ukur"]);
-    $noid =htmlspecialchars($data["noid"]);
-    $merk =htmlspecialchars($data["merk"]);
-    $datebefore = htmlspecialchars($data["datebefore"]);  // Menambahkan detik
-    $dateafter = htmlspecialchars($data["dateafter"]);  // Menambahkan detik
-    $poin =htmlspecialchars($data["Poin_Kalibrasi"]);
-    $hasil =htmlspecialchars($data["Hasil_Pengukuran"]);
-    $koreksi =htmlspecialchars($data["koreksi"]);
-    $u95 =htmlspecialchars($data["u95"]);
-    $koreksi_u95 =htmlspecialchars($data["Koreksi_U95_yang_diijinkan"]);
-    $status =htmlspecialchars($data["Status"]);
-    $pelaksana =htmlspecialchars($data["pelaksana"]);
-    $no_dokumen =htmlspecialchars($data["no_dokumen"]);
-    $lokasi =htmlspecialchars($data["lokasi"]);
-    $divisi =htmlspecialchars($data["divisi"]);
- 
+    $no_id = mysqli_real_escape_string($koneksi, $no_id);
+    $kolom = mysqli_real_escape_string($koneksi, $kolom);
+    $lama = mysqli_real_escape_string($koneksi, $lama);
+    $baru = mysqli_real_escape_string($koneksi, $baru);
+    $aksi = mysqli_real_escape_string($koneksi, $aksi);
+    $user = mysqli_real_escape_string($koneksi, $user);
 
-    $query = "INSERT INTO tb_alat (`Nama Alat Ukur`, `No. ID`, `Merk`, `Tanggal Kalibrasi`, `Tanggal Re-Kalibrasi`, `Poin Kalibrasi`, `Hasil Pengukuran`, `Koreksi`, `U95`, `Koreksi & U95 yang diijinkan`, `Status`, `pelaksana`, `no_dokumen`, `lokasi`, `divisi`)
-    VALUES
-    ('$nama', '$noid', '$merk', '$datebefore', '$dateafter', '$poin', '$hasil', '$koreksi', '$u95', '$koreksi_u95', '$status','$pelaksana','$no_dokumen', '$lokasi', '$divisi')";
+    $query = "INSERT INTO tb_kalibrasi_log 
+        (no_id, kolom_yang_diubah, nilai_lama, nilai_baru, waktu_perubahan, diubah_oleh, aksi)
+        VALUES 
+        ('$no_id', '$kolom', '$lama', '$baru', NOW(), '$user', '$aksi')";
 
-    mysqli_query($koneksi,$query);
+    mysqli_query($koneksi, $query);
+}
+
+// Fungsi tambah data alat ukur
+function tambah($data) {
+    global $koneksi;
+
+    $nama = htmlspecialchars($data['Nama_Alat_Ukur']);
+    $noid = htmlspecialchars($data['noid']);
+    $merk = htmlspecialchars($data['merk']);
+    $datebefore = htmlspecialchars($data['datebefore']);
+    $dateafter = htmlspecialchars($data['dateafter']);
+    $poin = htmlspecialchars($data['Poin_Kalibrasi']);
+    $hasil = htmlspecialchars($data['Hasil_Pengukuran']);
+    $koreksi = htmlspecialchars($data['koreksi']);
+    $u95 = htmlspecialchars($data['u95']);
+    $koreksi_u95 = htmlspecialchars($data['Koreksi_U95_yang_diijinkan']);
+    $status = htmlspecialchars($data['Status']);
+    $pelaksana = htmlspecialchars($data['pelaksana']);
+    $no_dokumen = htmlspecialchars($data['no_dokumen']);
+    $lokasi = htmlspecialchars($data['lokasi']);
+    $divisi = htmlspecialchars($data['divisi']);
+
+    $query = "INSERT INTO tb_alat 
+        (`Nama Alat Ukur`, `No. ID`, `Merk`, `Tanggal Kalibrasi`, `Tanggal Re-Kalibrasi`, 
+        `Poin Kalibrasi`, `Hasil Pengukuran`, `Koreksi`, `U95`, `Koreksi & U95 yang diijinkan`, 
+        `Status`, `pelaksana`, `no_dokumen`, `lokasi`, `divisi`)
+        VALUES 
+        ('$nama', '$noid', '$merk', '$datebefore', '$dateafter', '$poin', '$hasil', 
+        '$koreksi', '$u95', '$koreksi_u95', '$status', '$pelaksana', '$no_dokumen', '$lokasi', '$divisi')";
+
+    mysqli_query($koneksi, $query);
 
     $user = $_SESSION['full_name'] ?? 'unknown';
 
-    logperubahan($no_id, 'Nama Alat Ukur',null, $nama, 'INSERT', $user);
-    logperubahan($no_id, 'Merk',null, $merk, 'INSERT', $user);
-    logperubahan($no_id, 'Tanggal kalibrasi',null, $datebefore, 'INSERT', $user);
-    logperubahan($no_id, 'Status',null, $status, 'INSERT', $user);
-    logperubahan($no_id, 'Status',null, $status, 'INSERT', $user);
-    logperubahan($no_id, 'Status',null, $status, 'INSERT', $user);
-    logperubahan($no_id, 'Status',null, $status, 'INSERT', $user);
-    
+    // Log semua field utama
+    logperubahan($noid, 'Nama Alat Ukur', null, $nama, 'INSERT', $user);
+    logperubahan($noid, 'Merk', null, $merk, 'INSERT', $user);
+    logperubahan($noid, 'Tanggal Kalibrasi', null, $datebefore, 'INSERT', $user);
+    logperubahan($noid, 'Tanggal Re-Kalibrasi', null, $dateafter, 'INSERT', $user);
+    logperubahan($noid, 'Status', null, $status, 'INSERT', $user);
 
-    
     return mysqli_affected_rows($koneksi);
-
-
 }
 
-function logperubahan($no_id,$kolom, $lama,$baru,$aksi,$user='unknown'){
+// Fungsi update data
+function update($data) {
     global $koneksi;
 
-    $no_id= mysqli_real_escape_string($koneksi, $no_id)
-    $kolom= mysqli_real_escape_string($koneksi, $kolom)
-    $lama= mysqli_real_escape_string($koneksi, $lama)
-    $baru= mysqli_real_escape_string($koneksi, $baru)
-    $aksi= mysqli_real_escape_string($koneksi, $aksi)
-    $user= mysqli_real_escape_string($koneksi, $user)
+    $noid = htmlspecialchars($data['noid']);
+    $user = $_SESSION['full_name'] ?? 'unknown';
 
-    $query = "INSERT INTO tb_kalibrasi_log (no_id, kolom_yang_diubah, nilai_lama, nilai_baru, waktu_perubahan, diubah_oleh, aksi) VALUES ($no_id,$kolom, $lama, $baru, $user, $aksi)";
+    // Ambil data lama
+    $old = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT * FROM tb_alat WHERE `No. ID` = '$noid'"));
 
-    mysqli_query($koneksi, $query);
-}
+    $nama = htmlspecialchars($data['Nama_Alat_Ukur']);
+    $merk = htmlspecialchars($data['merk']);
+    $datebefore = htmlspecialchars($data['datebefore']);
+    $dateafter = htmlspecialchars($data['dateafter']);
+    $poin = htmlspecialchars($data['Poin_Kalibrasi']);
+    $hasil = htmlspecialchars($data['Hasil_Pengukuran']);
+    $koreksi = htmlspecialchars($data['koreksi']);
+    $u95 = htmlspecialchars($data['u95']);
+    $koreksi_u95 = htmlspecialchars($data['Koreksi_U95_yang_diijinkan']);
+    $status = htmlspecialchars($data['Status']);
 
-function update($data){
-    global $koneksi;
+    // Logging perubahan nyata saja
+    if ($old['Nama Alat Ukur'] !== $nama) logperubahan($noid, 'Nama Alat Ukur', $old['Nama Alat Ukur'], $nama, 'UPDATE', $user);
+    if ($old['Merk'] !== $merk) logperubahan($noid, 'Merk', $old['Merk'], $merk, 'UPDATE', $user);
+    if ($old['Tanggal Kalibrasi'] !== $datebefore) logperubahan($noid, 'Tanggal Kalibrasi', $old['Tanggal Kalibrasi'], $datebefore, 'UPDATE', $user);
+    if ($old['Tanggal Re-Kalibrasi'] !== $dateafter) logperubahan($noid, 'Tanggal Re-Kalibrasi', $old['Tanggal Re-Kalibrasi'], $dateafter, 'UPDATE', $user);
+    if ($old['Status'] !== $status) logperubahan($noid, 'Status', $old['Status'], $status, 'UPDATE', $user);
 
+    $query = "UPDATE tb_alat SET 
+        `Nama Alat Ukur` = '$nama',
+        `Merk` = '$merk',
+        `Tanggal Kalibrasi` = '$datebefore',
+        `Tanggal Re-Kalibrasi` = '$dateafter',
+        `Poin Kalibrasi` = '$poin',
+        `Hasil Pengukuran` = '$hasil',
+        `Koreksi` = '$koreksi',
+        `U95` = '$u95',
+        `Koreksi & U95 yang diijinkan` = '$koreksi_u95',
+        `Status` = '$status'
+        WHERE `No. ID` = '$noid'";
 
-    $nama =htmlspecialchars($data["Nama_Alat_Ukur"]);
-    $noid =htmlspecialchars($data["noid"]);
-    $merk =htmlspecialchars($data["merk"]);
-    $datebefore = htmlspecialchars($data["datebefore"]);  // Menambahkan detik
-    $dateafter = htmlspecialchars($data["dateafter"]);  // Menambahkan detik
-    $poin =htmlspecialchars($data["Poin_Kalibrasi"]);
-    $hasil =htmlspecialchars($data["Hasil_Pengukuran"]);
-    $koreksi =htmlspecialchars($data["koreksi"]);
-    $u95 =htmlspecialchars($data["u95"]);
-    $koreksi_u95 =htmlspecialchars($data["Koreksi_U95_yang_diijinkan"]);
-    $status =htmlspecialchars($data["Status"]);
-
-
-    $query = "UPDATE tb_alat SET
-    `Nama Alat Ukur` = '$nama',
-    `No. ID` = '$noid',
-    `Merk` = '$merk',
-    `Tanggal Kalibrasi`='$datebefore',
-    `Tanggal Re-Kalibrasi` ='$dateafter',
-    `Poin Kalibrasi` = '$poin',
-    `Hasil Pengukuran` = '$hasil',
-    `Koreksi` = '$koreksi',
-    `U95` = '$u95',
-    `Koreksi & U95 yang diijinkan` ='$koreksi_u95',
-    `Status` = '$status' WHERE `No. ID` = '$noid'";
-    
     mysqli_query($koneksi, $query);
 
     return mysqli_affected_rows($koneksi);
-
 }
 
-
-
-function hapus($data){
+// Fungsi hapus data (soft delete disarankan)
+function hapus($noid) {
     global $koneksi;
+    $user = $_SESSION['full_name'] ?? 'unknown';
 
-    mysqli_query($koneksi, "DELETE FROM tb_alat  WHERE `No. ID` = '$data'");
+    // Soft delete: update is_deleted = 1 (disarankan buat kolom ini)
+    mysqli_query($koneksi, "UPDATE tb_alat SET is_deleted = 1 WHERE `No. ID` = '$noid'");
+    logperubahan($noid, 'is_deleted', 0, 1, 'DELETE', $user);
+
     return mysqli_affected_rows($koneksi);
 }
 
-function register($data){
+// Fungsi register user
+function register($data) {
     global $koneksi;
 
     $first_name = htmlspecialchars($data['first_name']);
@@ -160,28 +149,18 @@ function register($data){
     // Cek apakah email sudah ada
     $query = "SELECT email FROM tb_users WHERE email = '$email'";
     $k = mysqli_query($koneksi, $query);
-    
-    if (mysqli_num_rows($k) > 0) {
-        // Email sudah terdaftar
-        return false;
-    }
 
-    // Cek apakah password cocok
-    if ($password !== $password2) {
+    if (mysqli_num_rows($k) > 0 || $password !== $password2) {
         return false;
     }
 
     // Hash password
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
-
-    // Gabungkan nama depan dan belakang
     $full_name = $first_name . ' ' . $last_name;
 
-    // Insert data
-    mysqli_query($koneksi, "INSERT INTO tb_users (`full_name`, `email`, `password`) VALUES ('$full_name', '$email', '$password_hash')");
+    mysqli_query($koneksi, "INSERT INTO tb_users (`full_name`, `email`, `password`) 
+        VALUES ('$full_name', '$email', '$password_hash')");
 
     return mysqli_affected_rows($koneksi);
 }
-
-
 ?>
