@@ -82,11 +82,13 @@ $no = 1;
                     </div>
                 </div>
             </div>
-
             <a href="tambah.php" class="btn btn-success mb-2">Tambahkan Alatmu</a>
-
             <div class="card mb-4">
+                <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                </div>
                 <div class="card-body">
+                    <?php foreach($kalibrasi as $kl): ?>
                     <table id="datatablesSimple">
                         <thead>
                             <tr>
@@ -116,8 +118,8 @@ $no = 1;
                                     <td><?= $kl['Nama Alat Ukur']; ?></td>
                                     <td><?= $kl['No. ID']; ?></td>
                                     <td><?= $kl['Merk']; ?></td>
-                                    <td><?= $kl['Tanggal Kalibrasi']; ?></td>
-                                    <td><?= $kl['Tanggal Re-Kalibrasi']; ?></td>
+                                    <td><?= date ('d-m-Y H:i:s',strtotime($kl['Tanggal Kalibrasi'])); ?></td>
+                                    <td><?= date ('d-m-Y H:i:s',strtotime($kl['Tanggal Re-Kalibrasi'])); ?></td>
                                     <td><?= $kl['Poin Kalibrasi']; ?></td>
                                     <td><?= $kl['Hasil Pengukuran']; ?></td>
                                     <td><?= $kl['Koreksi']; ?></td>
@@ -133,20 +135,19 @@ $no = 1;
                                         <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapusModal<?= $kl['No. ID']; ?>"><i class="bi bi-trash3"></i></a>
                                     </td>
                                 </tr>
-
-                                <div class="modal fade" id="hapusModal<?= $kl['No. ID']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="hapusModal<?= $kl['No. ID']; ?>" tabindex="-1" aria-labelledby="modalLabel<?= $kl['No. ID']; ?>" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title">Konfirmasi Hapus</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <h5 class="modal-title" id="modalLabel<?= $kl['No. ID']; ?>">Konfirmasi Hapus</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                                             </div>
                                             <div class="modal-body">
-                                                Apakah kamu yakin ingin menghapus alat ini?
+                                                Apakah kamu yakin ingin menghapus data alat <strong><?= $kl['Nama Alat Ukur']; ?></strong> (ID: <?= $kl['No. ID']; ?>)?
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                <a class="btn btn-danger" href="hapus.php?noid=<?= $kl['No. ID']; ?>">Hapus</a>
+                                                <a class="btn btn-danger" href="hapus.php?noid=<?= $kl['No. ID']; ?>">Ya, Hapus</a>
                                             </div>
                                         </div>
                                     </div>
@@ -158,22 +159,4 @@ $no = 1;
             </div>
         </div>
     </main>
-    <footer class="py-4 bg-light mt-auto">
-        <div class="container-fluid px-4">
-            <div class="d-flex align-items-center justify-content-between small">
-                <div class="text-muted">Copyright &copy; JMI 2025</div>
-                <div>
-                    <a href="#">Privacy Policy</a>
-                    &middot;
-                    <a href="#">Terms &amp; Conditions</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-<script src="js/scripts.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-<script src="js/datatables-simple-demo.js"></script>
+<?php include "template/footer.php";?>

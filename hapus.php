@@ -1,17 +1,21 @@
 <?php
-    require_once "function.php";
-    $noid = $_GET["noid"];
+require 'function.php';
 
-    if (hapus($noid) > 0) {
-        echo "<script>
-            alert('data berhasil dihapus');
-            document.location.href = 'index.php';
-        </script>";
+if (!isset($_SESSION['email'])) {
+    header("Location: login.php");
+    exit;
+}
 
-    }else{
-        echo "<script>
-            alert('data error dihapus');
-            document.location.href = 'hapus.php';
-        </script>";
-    }
+$noid = $_GET['noid'];
+
+if (hapus($noid) > 0) {
+    echo "<script>
+        document.location.href = 'index.php';
+    </script>";
+} else {
+    echo "<script>
+        alert('Gagal menghapus data!');
+        document.location.href = 'index.php';
+    </script>";
+}
 ?>
