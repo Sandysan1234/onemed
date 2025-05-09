@@ -5,6 +5,11 @@ if (!isset($_SESSION['email'])) {
     header("Location: login.php");
     exit;
 }
+// hapus.php
+require 'akses.php';
+cek_multi_akses(['superadmin', 'admin']);
+
+
 
 $noid = $_GET['noid'];
 
@@ -18,4 +23,4 @@ if (hapus($noid) > 0) {
         document.location.href = 'index.php';
     </script>";
 }
-?>
+?>  

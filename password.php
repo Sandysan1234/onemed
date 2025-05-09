@@ -1,3 +1,30 @@
+<?php
+include 'function.php';
+$message = '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST['email'];
+    $token = buatResetToken($email);
+
+    if ($token) {
+        $host = $_SERVER['HTTP_HOST']; // e.g., localhost
+        $path = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+        $link = "http://$host$path/reset-password.php?token=$token";
+
+        // Kirim email (ganti sesuai sistemmu)
+        $subject = "Reset Password";
+        $pesan = "Klik link berikut untuk reset password Anda: $link";
+        mail($email, $subject, $pesan);
+
+        $message = "Link reset dikirim ke email.";
+    } else {
+        $message = "Email tidak ditemukan.";
+    }
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -10,7 +37,7 @@
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
-    <body class="bg-primary">
+    <body class="">
         <div id="layoutAuthentication">
             <div id="layoutAuthentication_content">
                 <main>
@@ -21,19 +48,20 @@
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">Password Recovery</h3></div>
                                     <div class="card-body">
                                         <div class="small mb-3 text-muted">Enter your email address and we will send you a link to reset your password.</div>
-                                        <form>
+                                        <form method="post">
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
+                                                <input class="form-control" name="email" id="inputEmail" type="email" placeholder="name@example.com" />
                                                 <label for="inputEmail">Email address</label>
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                                <a class="small" href="login.html">Return to login</a>
-                                                <a class="btn btn-primary" href="login.html">Reset Password</a>
+                                                <a class="small" href="login.php">Return to login</a>
+                                                <button class="btn btn-primary" type="submit">Reset Password</button>
                                             </div>
                                         </form>
+                                        <?php if ($message): ?><p class='alert alert-dark mt-2 p-1'><?= $message ?></p><?php endif; ?>
                                     </div>
                                     <div class="card-footer text-center py-3">
-                                        <div class="small"><a href="register.html">Need an account? Sign up!</a></div>
+                                        <div class="small"><a href="register.php">Need an account? Sign up!</a></div>
                                     </div>
                                 </div>
                             </div>

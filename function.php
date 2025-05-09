@@ -81,62 +81,7 @@ function tambah($data) {
     
 }
 
-// Fungsi update data
-// function update($data) {
-//     global $koneksi;
 
-//     $noid = htmlspecialchars($data['noid']);
-//     $user = $_SESSION['full_name'] ?? 'unknown';
-
-//     // Ambil data lama
-//     $old = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT * FROM tb_alat WHERE `No. ID` = '$noid'"));
-
-//     $nama = htmlspecialchars($data['Nama_Alat_Ukur']);
-//     $merk = htmlspecialchars($data['merk']);
-//     $datebefore = htmlspecialchars($data['datebefore']);
-//     $dateafter = htmlspecialchars($data['dateafter']);
-//     $poin = htmlspecialchars($data['Poin_Kalibrasi']);
-//     $hasil = htmlspecialchars($data['Hasil_Pengukuran']);
-//     $koreksi = htmlspecialchars($data['koreksi']);
-//     $u95 = htmlspecialchars($data['u95']);
-//     $koreksi_u95 = htmlspecialchars($data['Koreksi_U95_yang_diijinkan']);
-//     $status = htmlspecialchars($data['Status']);
-
-//     // Logging perubahan nyata saja
-//     if ($old['Nama Alat Ukur'] !== $nama) logperubahan($noid, 'Nama Alat Ukur', $old['Nama Alat Ukur'], $nama, 'UPDATE', $user);
-//     if ($old['Merk'] !== $merk) logperubahan($noid, 'Merk', $old['Merk'], $merk, 'UPDATE', $user);
-//     if ($old['Tanggal Kalibrasi'] !== $datebefore) logperubahan($noid, 'Tanggal Kalibrasi', $old['Tanggal Kalibrasi'], $datebefore, 'UPDATE', $user);
-//     if ($old['Tanggal Re-Kalibrasi'] !== $dateafter) logperubahan($noid, 'Tanggal Re-Kalibrasi', $old['Tanggal Re-Kalibrasi'], $dateafter, 'UPDATE', $user);
-//     if ($old['Poin Kalibrasi'] !== $poin) logperubahan($noid, 'Poin Kalibrasi', $old['Poin Kalibrasi'], $poin, 'UPDATE', $user);
-//     if ($old['Hasil Pengukuran'] !== $hasil) logperubahan($noid, 'Hasil Pengukuran', $old['Hasil Pengukuran'], $hasil, 'UPDATE', $user);
-//     if ($old['Koreksi'] !== $koreksi) logperubahan($noid, 'Koreksi', $old['Koreksi'], $koreksi, 'UPDATE', $user);
-//     if ($old['u95'] !== $u95) logperubahan($noid, 'u95', $old['u95'], $u95, 'UPDATE', $user);
-//     if ($old['koreksi & u95 yang diijinkan'] !== $koreksi_u95) logperubahan($noid, 'koreksi & u95 yang diijinkan', $old['koreksi & u95 yang diijinkan'], $koreksi_u95, 'UPDATE', $user);
-//     if ($old['Status'] !== $status) logperubahan($noid, 'Status', $old['Status'], $status, 'UPDATE', $user);
-//     if ($old['pelaksana'] !== $pelaksana) logperubahan($noid, 'pelaksana', $old['pelaksana'], $pelaksana, 'UPDATE', $user);
-//     if ($old['no_dokumen'] !== $no_dokumen) logperubahan($noid, 'no_dokumen', $old['no_dokumen'], $no_dokumen, 'UPDATE', $user);
-//     if ($old['lokasi'] !== $lokasi) logperubahan($noid, 'lokasi', $old['lokasi'], $lokasi, 'UPDATE', $user);
-//     if ($old['divisi'] !== $divisi) logperubahan($noid, 'divisi', $old['divisi'], $divisi, 'UPDATE', $user);
-    
-    
-
-//     $query = "UPDATE tb_alat SET 
-//         `Nama Alat Ukur` = '$nama',
-//         `Merk` = '$merk',
-//         `Tanggal Kalibrasi` = '$datebefore',
-//         `Tanggal Re-Kalibrasi` = '$dateafter',
-//         `Poin Kalibrasi` = '$poin',
-//         `Hasil Pengukuran` = '$hasil',
-//         `Koreksi` = '$koreksi',
-//         `U95` = '$u95',
-//         `Koreksi & U95 yang diijinkan` = '$koreksi_u95',
-//         `Status` = '$status'
-//         WHERE `No. ID` = '$noid'";
-
-//     mysqli_query($koneksi, $query);
-
-//     return mysqli_affected_rows($koneksi);
-// }
 
 function update($data) {
     global $koneksi;
@@ -219,10 +164,41 @@ function register($data) {
     // Hash password
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
     $full_name = $first_name . ' ' . $last_name;
+    $role = 'user';
 
-    mysqli_query($koneksi, "INSERT INTO tb_users (`full_name`, `email`, `password`) 
-        VALUES ('$full_name', '$email', '$password_hash')");
+    mysqli_query($koneksi,"INSERT INTO tb_users (`full_name`, `email`, `password`, `role`) VALUES ('$full_name', '$email', '$password_hash', '$role')");
 
     return mysqli_affected_rows($koneksi);
 }
+// Buat token reset password
+function buatResetToken($email) {
+    global $koneksi;
+
+    $email = mysqli_real_escape_string($koneksi, $email);
+    $token = bin2hex(random_bytes(32));
+    $expiry = date("Y-m-d H:i:s", strtotime("+1 hour"));
+
+    $cek = mysqli_query($koneksi, "SELECT * FROM tb_users WHERE email = '$email'");
+    if (mysqli_num_rows($cek) == 0) return false;
+
+    mysqli_query($koneksi, "UPDATE tb_users SET reset_token = '$token', reset_expiry = '$expiry' WHERE email = '$email'");
+
+    return $token;
+}
+
+// Ganti password berdasarkan token
+function resetPassword($token, $newPassword) {
+    global $koneksi;
+
+    $token = mysqli_real_escape_string($koneksi, $token);
+    $check = mysqli_query($koneksi, "SELECT * FROM tb_users WHERE reset_token = '$token' AND reset_expiry > NOW()");
+
+    if (mysqli_num_rows($check) == 0) return false;
+
+    $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+    mysqli_query($koneksi, "UPDATE tb_users SET password = '$passwordHash', reset_token = NULL, reset_expiry = NULL WHERE reset_token = '$token'");
+
+    return mysqli_affected_rows($koneksi);
+}   
+
 ?>

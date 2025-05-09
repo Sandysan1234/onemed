@@ -82,18 +82,41 @@ $no = 1;
                     </div>
                 </div>
             </div>
-            <a href="tambah.php" class="btn btn-success mb-2">Tambahkan Alatmu</a>
+            <?php if ($_SESSION['role'] === 'superadmin' || $_SESSION['role'] === 'admin'): ?>
+                <a href="tambah.php" class="btn btn-success mb-2">Tambahkan Alatmu</a>
+            <?php endif; ?>
+            <!-- <a href="tambah.php" class="btn btn-success mb-2">Tambahkan Alatmu</a> -->
             <div class="card mb-4">
                 <div class="card-header">
-                <i class="fas fa-table me-1"></i>
+                    <i class="fas fa-table me-1"></i>
                 </div>
-                <div class="card-body">
-                    <?php foreach($kalibrasi as $kl): ?>
-                    <table id="datatablesSimple">
+                <div id="toolbar" class="mb-2">
+                    <select class="form-select-sm">
+                        <option value="basic">Export Basic</option>
+                        <option value="all">Export All</option>
+                        <option value="selected">Export Selected</option>
+                    </select>
+                </div>
+                <div class="card-body table-responsive">
+                    <table
+                        id="table"
+                        class="table my-3"
+                        data-toggle="table"
+                        data-toolbar="#toolbar"
+                        data-search="true"
+                        data-show-columns="true"
+                        data-show-toggle="true"
+                        data-show-export="true"
+                        data-click-to-select="true"
+                        data-pagination="true"
+                        data-side-pagination="client"
+                        data-export-types='["xlsx","csv", "excel", "pdf"]'
+                        data-export-options='{"fileName": "perubahan_log"}'>
                         <thead>
                             <tr>
+                                <th data-field="state" data-checkbox="true"></th>
                                 <th>No</th>
-                                <th>Name</th>
+                                <th>Nama Alat Ukur</th>
                                 <th>No ID</th>
                                 <th>Merk/Type/ No. Seri</th>
                                 <th>Tanggal Kalibrasi</th>
@@ -114,6 +137,7 @@ $no = 1;
                         <tbody>
                             <?php foreach($kalibrasi as $kl): ?>
                                 <tr>
+                                    <td></td>
                                     <td><?= $no++; ?></td>
                                     <td><?= $kl['Nama Alat Ukur']; ?></td>
                                     <td><?= $kl['No. ID']; ?></td>
@@ -129,10 +153,12 @@ $no = 1;
                                     <td><?= $kl['pelaksana']; ?></td>
                                     <td><?= $kl['no_dokumen']; ?></td>
                                     <td><?= $kl['lokasi']; ?></td>
-                                    <td><?= $kl['divisi']; ?></td>
+                                    <td><?= $kl['divisi'];?> </td>
                                     <td>
-                                        <a class="btn btn-warning mb-1 text-white" href="update.php?noid=<?= $kl['No. ID']; ?>"><i class="bi bi-pencil-square"></i></a>
-                                        <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapusModal<?= $kl['No. ID']; ?>"><i class="bi bi-trash3"></i></a>
+                                        <a class="btn btn-warning mb-1 text-white" href="update.php?noid=<?= $kl['No. ID']; ?>">Edit</a>
+                                        <?php if ($_SESSION['role'] === 'super_admin' || $_SESSION['role'] === 'admin'): ?>
+                                            <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapusModal<?= $kl['No. ID']; ?>">Hapus</a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                                 <div class="modal fade" id="hapusModal<?= $kl['No. ID']; ?>" tabindex="-1" aria-labelledby="modalLabel<?= $kl['No. ID']; ?>" aria-hidden="true">
@@ -159,4 +185,24 @@ $no = 1;
             </div>
         </div>
     </main>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.21.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.29.0/tableExport.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script> 
+    
+
+    <script>
+      $(function () {
+        $('#toolbar select').change(function () {
+          const type = $(this).val();
+          $('#table').bootstrapTable('refreshOptions', {
+            exportDataType: type
+          });
+        }).trigger('change');
+      });
+    </script>
+    
 <?php include "template/footer.php";?>

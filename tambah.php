@@ -1,10 +1,13 @@
 <?php
 require "function.php";
 
+
 if (!isset($_SESSION['email'])) {
     header("Location:login.php");
     exit;
 }
+include "akses.php";
+cek_multi_akses(['super_admin', 'admin']);
 
 ?>
 
